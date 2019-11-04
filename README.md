@@ -1,0 +1,2 @@
+# Location Based Crime Pattern detection Using ML
+ As the crime rate in our country is pretty high, it is becoming more and more of a concern for new house buyers to make sure that the location of their new home is relatively safer. Through this project, we are trying to achieve just that, making a system that aggregates previous crimes not only based on the location but also based on the victim's profile.
