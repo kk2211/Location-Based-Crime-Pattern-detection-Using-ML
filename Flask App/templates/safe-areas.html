@@ -1,0 +1,275 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <style>
+
+        @import url(https://fonts.googleapis.com/css?family=Lato:700);
+        *,
+        *:before,
+        *:after {
+        box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font
+        }
+
+        .set-size {
+            font-size: 10em;
+        }
+
+        .charts-container:after {
+            clear: both;
+            content: "";
+            display: table;
+        }
+
+        .pie-wrapper {
+            height: 1em;
+            width: 1em;
+            float: left;
+            margin: 15px;
+            position: relative;
+        }
+        .pie-wrapper:nth-child(3n + 1) {
+            clear: both;
+        }
+        .pie-wrapper .pie {
+            height: 100%;
+            width: 100%;
+            clip: rect(0, 1em, 1em, 0.5em);
+            left: 0;
+            position: absolute;
+            top: 0;
+        }
+        .pie-wrapper .pie .half-circle {
+            height: 100%;
+            width: 100%;
+            border: 0.1em solid #3498db;
+            border-radius: 50%;
+            clip: rect(0, 0.5em, 1em, 0);
+            left: 0;
+            position: absolute;
+            top: 0;
+        }
+        .pie-wrapper .label {
+            background: #34495e;
+            border-radius: 50%;
+            bottom: 0.4em;
+            color: #ecf0f1;
+            cursor: default;
+            display: block;
+            font-size: 0.25em;
+            left: 0.4em;
+            line-height: 2.8em;
+            position: absolute;
+            right: 0.4em;
+            text-align: center;
+            top: 0.4em;
+        }
+        .pie-wrapper .label .smaller {
+            color: #bdc3c7;
+            font-size: 0.45em;
+            padding-bottom: 20px;
+            vertical-align: super;
+        }
+        .pie-wrapper .shadow {
+            height: 100%;
+            width: 100%;
+            border: 0.1em solid #bdc3c7;
+            border-radius: 50%;
+        }
+        .pie-wrapper.style-2 .label {
+            background: none;
+            color: #ecf0f1;
+        }
+        .pie-wrapper.style-2 .label .smaller {
+            color: #bdc3c7;
+        }
+        .pie-wrapper--solid {
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .pie-wrapper--solid:before {
+            border-radius: 0 100% 100% 0 / 50%;
+            content: "";
+            display: block;
+            height: 100%;
+            margin-left: 50%;
+            -webkit-transform-origin: left;
+            transform-origin: left;
+        }
+        .pie-wrapper--solid .label {
+            background: transparent;
+        }
+
+        {% for i in range(0,36) %}
+            .pie-wrapper.progress-{{ i }} .pie .half-circle {
+                border-color: #FA200A;
+            }
+            .pie-wrapper.progress-{{ i }} .pie .left-side {
+                -webkit-transform: rotate({{ (i/100)*360 }}deg);
+                transform: rotate({{ (i/100)*360 }}deg);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .right-side {
+                display: none;
+            }
+        {% endfor %}
+
+        {% for i in range(36,51) %}
+            .pie-wrapper.progress-{{ i }} .pie .half-circle {
+                border-color: #FEA602;
+            }
+            .pie-wrapper.progress-{{ i }} .pie .left-side {
+                -webkit-transform: rotate({{ (i/100)*360 }}deg);
+                transform: rotate({{ (i/100)*360 }}deg);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .right-side {
+                display: none;
+            }
+        {% endfor %}
+
+        {% for i in range(51,75) %}
+            .pie-wrapper.progress-{{ i }} .pie {
+                clip: rect(auto, auto, auto, auto);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .half-circle {
+                border-color: #FEA602;
+            }
+            .pie-wrapper.progress-{{ i }} .pie .left-side {
+                -webkit-transform: rotate({{ (i/100)*360 }}deg);
+                transform: rotate({{ (i/100)*360 }}deg);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .right-side {
+                -webkit-transform: rotate({{ 180 }}deg);
+                transform: rotate({{ 180 }}deg);
+            }
+        {% endfor %}
+
+        {% for i in range(75, 101) %}
+            .pie-wrapper.progress-{{ i }} .pie {
+                clip: rect(auto, auto, auto, auto);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .half-circle {
+                border-color: #18D84D;
+            }
+            .pie-wrapper.progress-{{ i }} .pie .left-side {
+                -webkit-transform: rotate({{ (i/100)*360 }}deg);
+                transform: rotate({{ (i/100)*360 }}deg);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .right-side {
+                -webkit-transform: rotate({{ 180 }}deg);
+                transform: rotate({{ 180 }}deg);
+            }
+        {% endfor %}
+
+        .pie-wrapper--solid {
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .pie-wrapper--solid:before {
+            border-radius: 0 100% 100% 0 / 50%;
+            content: "";
+            display: block;
+            height: 100%;
+            margin-left: 50%;
+            -webkit-transform-origin: left;
+            transform-origin: left;
+        }
+        .pie-wrapper--solid .label {
+            background: transparent;
+        }
+    </style>
+
+    <font color="white">
+
+        <h2><b>Safer Areas Nearby {{ src_loc }} :</b></h2> Along with their Safety Index<br>
+
+        {% if safe_areas_lst==[] %}
+            <br>
+            <br>
+        <h3>No Safer Areas nearby than your selected location.</h3>
+        {% endif %}
+
+        <div class="row">
+            <div class="column text-center" style="padding: 45px">
+
+                {% for i in range(0, l, 4) %}
+                    <p>
+                    <h4>{{ safe_areas_lst[i] }}</h4>
+                    <div class="set-size charts-container">
+                    <div class="pie-wrapper pie-wrapper--solid progress-{{ crime_area[i] }} style-2">
+                        <span class="label">{{ crime_area[i] }}<span class="smaller">%</span></span>
+                        <div class="pie">
+                            <div class="left-side half-circle"></div>
+                            <div class="right-side half-circle"></div>
+                        </div>
+                    </div>
+                    </div>
+                    </p>
+                    <br>
+                {% endfor %}
+            </div>
+            <div class="column text-center" style="padding: 45px">
+                {% for i in range(1, l, 4) %}
+                    <p>
+                    <h4>{{ safe_areas_lst[i] }}</h4>
+                    <div class="set-size charts-container">
+                    <div class="pie-wrapper pie-wrapper--solid progress-{{ crime_area[i] }} style-2">
+                        <span class="label">{{ crime_area[i] }}<span class="smaller">%</span></span>
+                        <div class="pie">
+                            <div class="left-side half-circle"></div>
+                            <div class="right-side half-circle"></div>
+                        </div>
+                    </div>
+                    </div>
+                    </p>
+                    <br>
+                {% endfor %}
+            </div>
+            <div class="column text-center" style="padding: 45px">
+                {% for i in range(2, l, 4) %}
+                    <p>
+                    <h4>{{ safe_areas_lst[i] }}</h4>
+                    <div class="set-size charts-container">
+                    <div class="pie-wrapper pie-wrapper--solid progress-{{ crime_area[i] }} style-2">
+                        <span class="label">{{ crime_area[i] }}<span class="smaller">%</span></span>
+                        <div class="pie">
+                            <div class="left-side half-circle"></div>
+                            <div class="right-side half-circle"></div>
+                        </div>
+                    </div>
+                    </div>
+                    </p>
+                    <br>
+                {% endfor %}
+            </div>
+            <div class="column text-center" style="padding: 45px">
+                {% for i in range(3, l, 4) %}
+                    <p>
+                    <h4>{{ safe_areas_lst[i] }}</h4>
+                    <div class="set-size charts-container">
+                    <div class="pie-wrapper pie-wrapper--solid progress-{{ crime_area[i] }} style-2">
+                        <span class="label">{{ crime_area[i] }}<span class="smaller">%</span></span>
+                        <div class="pie">
+                            <div class="left-side half-circle"></div>
+                            <div class="right-side half-circle"></div>
+                        </div>
+                    </div>
+                    </div>
+                    </p>
+                    <br>
+                {% endfor %}
+            </div>
+        </div>
+
+
+    </font>
+
+
+
+
+
+
+{% endblock %}

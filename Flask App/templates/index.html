@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+
+
+    <div class="jumbotron">
+    <h2><b>Please enter your details</b></h2>
+
+    <form method="POST" >
+        <div class="form-group">
+            <label for="formGroupExampleInput">Age</label>
+            <input type="number" name="age" class="form-control" id="formGroupExampleInput" placeholder="Enter your age" required>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Location</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="location">
+                {% for loc in locations %}
+                    <option>{{ loc }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Gender</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="gender">
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Businessman</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="businessman">
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+        </div>
+        <div class="form-actions">
+            <p><input type="submit" class="btn btn-dark btn-sl" value="Submit"></p>
+        </div>
+    </form>
+
+    </div>
+
+    <br><br>
+
+
+{% endblock %}

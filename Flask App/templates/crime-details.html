@@ -1,0 +1,320 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+    <style>
+
+        @import url(https://fonts.googleapis.com/css?family=Lato:700);
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+        .set-size {
+            font-size: 10em;
+        }
+
+        .charts-container:after {
+            clear: both;
+            content: "";
+            display: table;
+        }
+
+        .pie-wrapper {
+            height: 1em;
+            width: 1em;
+            float: left;
+            margin: 15px;
+            position: relative;
+        }
+        .pie-wrapper:nth-child(3n + 1) {
+            clear: both;
+        }
+        .pie-wrapper .pie {
+            height: 100%;
+            width: 100%;
+            clip: rect(0, 1em, 1em, 0.5em);
+            left: 0;
+            position: absolute;
+            top: 0;
+        }
+        .pie-wrapper .pie .half-circle {
+            height: 100%;
+            width: 100%;
+            border: 0.1em solid #3498db;
+            border-radius: 50%;
+            clip: rect(0, 0.5em, 1em, 0);
+            left: 0;
+            position: absolute;
+            top: 0;
+        }
+        .pie-wrapper .label {
+            background: #34495e;
+            border-radius: 50%;
+            bottom: 0.4em;
+            color: #ecf0f1;
+            cursor: default;
+            display: block;
+            font-size: 0.25em;
+            left: 0.4em;
+            line-height: 2.8em;
+            position: absolute;
+            right: 0.4em;
+            text-align: center;
+            top: 0.4em;
+        }
+        .pie-wrapper .label .smaller {
+            color: #bdc3c7;
+            font-size: 0.45em;
+            padding-bottom: 20px;
+            vertical-align: super;
+        }
+        .pie-wrapper .shadow {
+            height: 100%;
+            width: 100%;
+            border: 0.1em solid #bdc3c7;
+            border-radius: 50%;
+        }
+        .pie-wrapper.style-2 .label {
+            background: none;
+            color: #7f8c8d;
+        }
+        .pie-wrapper.style-2 .label .smaller {
+            color: #bdc3c7;
+        }
+        .pie-wrapper--solid {
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .pie-wrapper--solid:before {
+            border-radius: 0 100% 100% 0 / 50%;
+            content: "";
+            display: block;
+            height: 100%;
+            margin-left: 50%;
+            -webkit-transform-origin: left;
+            transform-origin: left;
+        }
+        .pie-wrapper--solid .label {
+            background: transparent;
+        }
+
+
+        .pie-wrapper.progress-0 .pie {
+            clip: rect(auto, auto, auto, auto);
+        }
+        .pie-wrapper.progress-0 .pie .half-circle {
+            border-color: #868686;
+        }
+        .pie-wrapper.progress-0 .pie .left-side {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+        .pie-wrapper.progress-0 .pie .right-side {
+            -webkit-transform: rotate({{ 180 }}deg);
+            transform: rotate({{ 180 }}deg);
+        }
+
+        {% for i in range(1,36) %}
+            .pie-wrapper.progress-{{ i }} .pie .half-circle {
+                border-color: #FA200A;
+            }
+            .pie-wrapper.progress-{{ i }} .pie .left-side {
+                -webkit-transform: rotate({{ (i/100)*360 }}deg);
+                transform: rotate({{ (i/100)*360 }}deg);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .right-side {
+                display: none;
+            }
+        {% endfor %}
+
+        {% for i in range(36,51) %}
+            .pie-wrapper.progress-{{ i }} .pie .half-circle {
+                border-color: #FEA602;
+            }
+            .pie-wrapper.progress-{{ i }} .pie .left-side {
+                -webkit-transform: rotate({{ (i/100)*360 }}deg);
+                transform: rotate({{ (i/100)*360 }}deg);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .right-side {
+                display: none;
+            }
+        {% endfor %}
+
+        {% for i in range(51,75) %}
+            .pie-wrapper.progress-{{ i }} .pie {
+                clip: rect(auto, auto, auto, auto);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .half-circle {
+                border-color: #FEA602;
+            }
+            .pie-wrapper.progress-{{ i }} .pie .left-side {
+                -webkit-transform: rotate({{ (i/100)*360 }}deg);
+                transform: rotate({{ (i/100)*360 }}deg);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .right-side {
+                -webkit-transform: rotate({{ 180 }}deg);
+                transform: rotate({{ 180 }}deg);
+            }
+        {% endfor %}
+
+        {% for i in range(75, 101) %}
+            .pie-wrapper.progress-{{ i }} .pie {
+                clip: rect(auto, auto, auto, auto);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .half-circle {
+                border-color: #18D84D;
+            }
+            .pie-wrapper.progress-{{ i }} .pie .left-side {
+                -webkit-transform: rotate({{ (i/100)*360 }}deg);
+                transform: rotate({{ (i/100)*360 }}deg);
+            }
+            .pie-wrapper.progress-{{ i }} .pie .right-side {
+                -webkit-transform: rotate({{ 180 }}deg);
+                transform: rotate({{ 180 }}deg);
+            }
+        {% endfor %}
+
+        .pie-wrapper--solid {
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .pie-wrapper--solid:before {
+            border-radius: 0 100% 100% 0 / 50%;
+            content: "";
+            display: block;
+            height: 100%;
+            margin-left: 50%;
+            -webkit-transform-origin: left;
+            transform-origin: left;
+        }
+        .pie-wrapper--solid .label {
+            background: transparent;
+        }
+    </style>
+
+    <br>
+    <font color="white">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-lg-5">
+                    <h2><b>Area at a glance</b></h2>
+                    <h5>Crime occurring most frequently : {{ most_occ_crime }}</h5>
+                    <br>
+
+                    <p>Crimes reported in your area in past 3-months : {{ crime_count }}<br>
+                    No. of Crimes targeting your age-group : {{ crime_ages }}<br>
+
+
+                    {% if crime_ages>0 %}
+                        {% if s!=-1 %} Most frequent crime targeting your age group : {{ s }}<br>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if businessman=='Yes' %}
+                        Total businessman targeted : {{ no_businessman }}
+                    {% endif %}
+                    </p>
+
+                    <h4>Safety Index :</h4>
+
+                    <div class="set-size charts-container" style="padding: 10px">
+                        <div class="pie-wrapper pie-wrapper--solid progress-{{ si }} style-2">
+                            <span class="label">{{ si }}<span class="smaller">%</span></span>
+                            <div class="pie">
+                                <div class="left-side half-circle"></div>
+                                <div class="right-side half-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <h2><b>Crime reports in {{ location }}</b></h2>
+                    <div style="height:400px;width:600px;overflow:auto;padding:10px;">
+                        {% for i in range(crime_count) %}
+                            <p>
+                                <b>Date :</b> {{ news[0][i] }} <br>
+                                <b>Crime Type :</b> {{ news[2][i][0].upper() + news[2][i][1:] }} <br>
+                                {{ news[1][i] }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </font>
+    <br>
+    <br>
+    <div class="jumbotron text-center" style="height: 480px;">
+        <table style="margin-left: auto; margin-right: auto">
+            <tr><td colspan="2" align="center"><h4><b>Crime Distribution Charts</b></h4></td></tr>
+
+            <tr>
+                <td>
+                    <div id="crime_distribution"></div>
+                    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                    <script type="text/javascript">
+                        google.charts.load('current', {'packages':['corechart']});
+                        google.charts.setOnLoadCallback(crimeDistribution);
+                        function crimeDistribution() {
+                            var data = google.visualization.arrayToDataTable([
+                                ['Crime', 'Count'],
+                                ['Burglary', {{ crimes['burglary'] }}],
+                                ['Robbery', {{ crimes['robbery'] }}],
+                                ['Murder', {{ crimes['murder'] }}],
+                                ['Kidnapping', {{ crimes['kidnapping'] }}],
+                                ['Rape', {{ crimes['rape'] }}]
+                            ]);
+                            var options = {'title':'Crime Distribution for {{ location }}', 'width':465, 'height':400, backgroundColor: 'transparent'};
+                            var chart = new google.visualization.PieChart(document.getElementById('crime_distribution'));
+                            chart.draw(data, options);
+                        }
+                    </script>
+                </td>
+                <td>
+                    <div id="age_crime"></div>
+                    <script type="text/javascript">
+                        google.charts.load('current', {'packages':['corechart']});
+                        google.charts.setOnLoadCallback(ageCrime);
+                        function ageCrime() {
+                            var data = google.visualization.arrayToDataTable([
+                                ['Age Group', 'Count of Crime'],
+                                ['0-21', {{ age_crimes['0-21'] }}],
+                                ['22-50', {{ age_crimes['22-50'] }}],
+                                ['50+', {{ age_crimes['50+'] }}],
+                                ['NA', {{ age_crimes['NA'] }}]
+                            ]);
+                            var options = {'title':'Crime Distribution by Age', 'width':465, 'height':400, backgroundColor: 'transparent'};
+                            var chart = new google.visualization.PieChart(document.getElementById('age_crime'));
+                            chart.draw(data, options);
+                        }
+                    </script>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
+
+    <font color="white">
+        <h3>Search for safer areas nearby your selected location :</h3>
+    </font>
+
+    <div class="row">
+        <form class="form-inline buttons-flex" method="POST">
+            <div class="column" style="padding: 40px">
+                <button type="submit" class="btn btn-light btn-sl" name="distance" value="2.5km">2.5 KM</button>
+            </div>
+            <div class="column" style="padding: 40px">
+                <button type="submit" class="btn btn-light btn-sl" name="distance" value="5km">5 KM</button>
+            </div>
+            <div class="column" style="padding: 40px">
+                <button type="submit" class="btn btn-light btn-sl" name="distance" value="10km">10 KM</button>
+            </div>
+        </form>
+    </div>
+
+
+    <br>
+
+{% endblock %}
